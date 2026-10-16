@@ -1,24 +1,117 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Icon, Label, Tabs } from "expo-router";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
+import { Platform } from "react-native";
+import { useUserStore } from "../../../../store/userStore";
 
-export default function TabLayout() {
+function AndroidTabs() {
+    const isAdmin = useUserStore((state) => state.isAdmin);
+
     return (
-        <NativeTabs tintColor="#16A34A" backgroundColor="#FFFFFF">
+        <Tabs
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    height: 60,
+                    paddingTop: 2,
+                    paddingBottom: 6,
+                },
+            }}
+        >
+            <Tabs.Screen
+                name="index"
+                options={{
+                    title: "Home",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="home" color={color} size={size} />
+                    ),
+                }}
+            />
+
+            <Tabs.Screen
+                name="search"
+                options={{
+                    title: "Search",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="search" color={color} size={size} />
+                    ),
+                }}
+            />
+
+            {isAdmin && (
+                <Tabs.Screen
+                    name="create"
+                    options={{
+                        title: "Add Property",
+                        tabBarIcon: ({ color, size }) => (
+                            <Ionicons
+                                name="add-circle"
+                                color={color}
+                                size={size}
+                            />
+                        ),
+                    }}
+                />
+            )}
+
+            <Tabs.Screen
+                name="saved"
+                options={{
+                    title: "Saved",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="heart" color={color} size={size} />
+                    ),
+                }}
+            />
+
+            <Tabs.Screen
+                name="profile"
+                options={{
+                    title: "Profile",
+                    tabBarIcon: ({ color, size }) => (
+                        <Ionicons name="person" color={color} size={size} />
+                    ),
+                }}
+            />
+        </Tabs>
+    );
+}
+
+function IosTabs() {
+    const isAdmin = useUserStore((state) => state.isAdmin);
+
+    return (
+        <NativeTabs>
             <NativeTabs.Trigger name="index">
-                <NativeTabs.Trigger.Label>Home</NativeTabs.Trigger.Label>
-                <NativeTabs.Trigger.Icon sf="house.fill" />
+                <Icon sf="house.fill" />
+                <Label>Home</Label>
             </NativeTabs.Trigger>
+
             <NativeTabs.Trigger name="search">
-                <NativeTabs.Trigger.Label>Search</NativeTabs.Trigger.Label>
-                <NativeTabs.Trigger.Icon sf="magnifyingglass" />
+                <Icon sf="magnifyingglass" />
+                <Label>Search</Label>
             </NativeTabs.Trigger>
+
+            {isAdmin && (
+                <NativeTabs.Trigger name="create">
+                    <Icon sf="plus.circle.fill" />
+                    <Label>Add Property</Label>
+                </NativeTabs.Trigger>
+            )}
+
             <NativeTabs.Trigger name="saved">
-                <NativeTabs.Trigger.Label>Saved</NativeTabs.Trigger.Label>
-                <NativeTabs.Trigger.Icon sf="heart.fill" />
+                <Icon sf="heart.fill" />
+                <Label>Saved</Label>
             </NativeTabs.Trigger>
+
             <NativeTabs.Trigger name="profile">
-                <NativeTabs.Trigger.Label>Profile</NativeTabs.Trigger.Label>
-                <NativeTabs.Trigger.Icon sf="person.circle" />
+                <Icon sf="person.fill" />
+                <Label>Profile</Label>
             </NativeTabs.Trigger>
         </NativeTabs>
     );
+}
+
+export default function TabsLayout() {
+    return Platform.OS === "ios" ? <IosTabs /> : <AndroidTabs />;
 }
