@@ -26,11 +26,9 @@
         "plugins": [
             "expo-router",
             [
-                "expo-splash-screen",
+                "expo-location",
                 {
-                    "backgroundColor": "#208AEF",
-                    "image": "./assets/images/roofline.png",
-                    "imageWidth": 76
+                    "locationWhenInUsePermission": "Allow Kribb to access your location to tag property coordinates."
                 }
             ],
             "@clerk/expo",
